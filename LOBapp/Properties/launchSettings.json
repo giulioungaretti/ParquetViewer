@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "LOBapp (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "LOBapp (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
