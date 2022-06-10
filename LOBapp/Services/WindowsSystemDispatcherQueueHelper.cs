@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace LOBapp
+namespace LOBapp.Services
 {
     internal class WindowsSystemDispatcherQueueHelper
     {

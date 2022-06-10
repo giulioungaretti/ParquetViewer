@@ -4,9 +4,9 @@ using Microsoft.UI.Xaml;
 
 using System;
 
-using WinRT; 
+using WinRT;
 
-namespace LOBapp;
+namespace LOBapp.Services;
 
 public class BackDrop
 {
