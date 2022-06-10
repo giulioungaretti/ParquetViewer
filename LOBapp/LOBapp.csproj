@@ -37,4 +37,14 @@
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnablePreviewMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="MainWindow.xaml" />
+    <None Remove="ViewFilePage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="ViewFilePage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
 </Project>
