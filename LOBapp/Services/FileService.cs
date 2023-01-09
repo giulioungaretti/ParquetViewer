@@ -40,8 +40,8 @@ public class FileService
                     // TODO: read docs
                     TreatByteArrayAsString = true
                 };
-                using var reader = new ParquetReader(systemStream, formatOptions);
-                var table = reader.ReadAsTable();
+                using var reader = await ParquetReader.CreateAsync(systemStream, formatOptions);
+                var table = await reader.ReadAsTableAsync();
                 return new TableResult(file.Name, table, null);
             }
             return new TableResult(null, null, "Only .parquet files are supported");
