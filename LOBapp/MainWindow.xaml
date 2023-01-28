@@ -6,9 +6,41 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Title="{x:Bind ViewModel.FilePath, Mode=OneWay}">
-
-    <Grid RowDefinitions="Auto,*,Auto">
-        <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" Grid.Row="0" HorizontalAlignment="Left" Opacity="1">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid x:Name="AppTitleBar"  
+                Height="48">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="LeftPaddingColumn" Width="0"/>
+                <ColumnDefinition x:Name="IconColumn" Width="Auto"/>
+                <ColumnDefinition x:Name="TitleColumn" Width="Auto"/>
+                <ColumnDefinition x:Name="LeftDragColumn" Width="*"/>
+                <ColumnDefinition x:Name="SearchColumn" Width="Auto"/>
+                <ColumnDefinition x:Name="RightDragColumn" Width="*"/>
+                <ColumnDefinition x:Name="RightPaddingColumn" Width="0"/>
+            </Grid.ColumnDefinitions>
+            <Image x:Name="TitleBarIcon" Source="/Images/WindowIcon.png"
+           Grid.Column="1"
+           Width="16" Height="16"
+           Margin="8,0,0,0"/>
+            <TextBlock x:Name="TitleTextBlock" 
+               Text="App title" 
+               Style="{StaticResource CaptionTextBlockStyle}"
+               Grid.Column="2"
+               VerticalAlignment="Center"
+               Margin="4,0,0,0"/>
+            <AutoSuggestBox Grid.Column="4" QueryIcon="Find"
+                    PlaceholderText="Search"
+                    VerticalAlignment="Center"
+                    Width="260" Margin="4,0"/>
+        </Grid>
+        <CommandBar Grid.Row="1"
+                    Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" HorizontalAlignment="Left" Opacity="1">
             <AppBarButton Icon="OpenFile" Label="Open" Command="{x:Bind ViewModel.GetTableAsyncCommand}" >
                 <AppBarButton.KeyboardAccelerators>
                     <KeyboardAccelerator Modifiers="Control" Key="O" />
@@ -27,13 +59,13 @@
                 </AppBarButton>
             </CommandBar.SecondaryCommands>
         </CommandBar>
-        <ProgressRing IsActive="{x:Bind ViewModel.IsDoingIO, Mode=OneWay}" Grid.Row="1"/>
-        <Frame x:Name="Body" Grid.Row="1"  Margin="5,0"/>
+        <ProgressRing IsActive="{x:Bind ViewModel.IsDoingIO, Mode=OneWay}" Grid.Row="2"/>
+        <Frame x:Name="Body" Grid.Row="2"  Margin="5,0"/>
         <InfoBar
         IsOpen="{x:Bind ViewModel.InfoBarOpen, Mode=OneWay}"
         Severity="{x:Bind ViewModel.InfoBarSev, Mode=OneWay}"
         Message="{x:Bind ViewModel.InfoBarMsg, Mode=OneWay}"
-        Grid.Row="2"
+        Grid.Row="3"
         Margin="5"
          />
     </Grid>

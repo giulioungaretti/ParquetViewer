@@ -1,6 +1,8 @@
 ﻿using LOBapp.Services;
 using LOBapp.ViewModels;
 
+using Microsoft.UI;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 
 namespace LOBapp;
@@ -11,17 +13,19 @@ public sealed partial class MainWindow : Window
     {
         this.InitializeComponent();
         ViewModel = new MainPageViewModel(this);
-
-        BackDrop backdrop = new(this);
-        backdrop.SetBackdrop();
-
-        // TODO: style title bar
-        //ExtendsContentIntoTitleBar = true;
-        //SetTitleBar(AppTitleBar);
     }
 
-    public MainPageViewModel ViewModel { get;}
+    public MainPageViewModel ViewModel { get; }
     public void SetBody(UIElement uiElement) => Body.Content = uiElement;
 
     public UIElement GetBody() => Body;
+    public string GetAppTitleFromSystem()
+    {
+        var title = Windows.ApplicationModel.Package.Current.DisplayName;
+        if (!string.IsNullOrEmpty(title))
+        {
+            return "thte title";
+        }
+        return Windows.ApplicationModel.Package.Current.DisplayName;
+    }
 }

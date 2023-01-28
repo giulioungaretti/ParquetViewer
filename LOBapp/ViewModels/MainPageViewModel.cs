@@ -15,8 +15,8 @@ namespace LOBapp.ViewModels;
 
 public partial class MainPageViewModel : ObservableObject
 {
-    readonly IntPtr hwnd;
-    readonly MainWindow mainWindow;
+    private readonly IntPtr hwnd;
+    private readonly MainWindow mainWindow;
 
     public MainPageViewModel(MainWindow window)
     {
