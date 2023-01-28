@@ -1,6 +1,7 @@
-# LOBapp (parquet reading)
+# A parquet reading example app. 
 
-A simple winui 3 // core app that loads and show a parquet file.
+
+A winui 3 // core app that loads and show a parquet file.
 Showcases using:
  - mvvm toolkit
  - community components
