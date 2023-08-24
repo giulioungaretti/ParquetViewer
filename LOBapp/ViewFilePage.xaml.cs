@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.WinUI.UI.Controls;
+﻿using Apache.Arrow;
+using CommunityToolkit.WinUI.UI.Controls;
 
 using LOBapp.ViewModels;
 
