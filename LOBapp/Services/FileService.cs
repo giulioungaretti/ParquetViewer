@@ -1,6 +1,5 @@
 ﻿using Parquet;
-using Parquet.Data.Rows;
-
+using Parquet.Rows;
 using System;
 using System.IO;
 using System.Threading.Tasks;

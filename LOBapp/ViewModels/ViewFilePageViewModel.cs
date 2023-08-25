@@ -1,18 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 
-using LOBapp.Services;
-
-using Microsoft.UI.Xaml.Controls;
-
-using Parquet.Data.Rows;
-
-using System;
-using System.Collections;
-
-using Windows.Storage.Pickers;
-
-using WinRT.Interop;
+using Parquet.Rows;
 
 namespace LOBapp.ViewModels;
 

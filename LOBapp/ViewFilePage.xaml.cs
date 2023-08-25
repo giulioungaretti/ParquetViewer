@@ -1,5 +1,4 @@
-﻿using Apache.Arrow;
-using CommunityToolkit.WinUI.UI.Controls;
+﻿using CommunityToolkit.WinUI.UI.Controls;
 
 using LOBapp.ViewModels;
 
@@ -7,7 +6,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Data;
 
-using Parquet.Data;
+using Parquet.Schema;
 
 namespace LOBapp;
 
