@@ -4,6 +4,7 @@ using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
+using System;
 using Windows.Foundation;
 
 namespace LOBapp;
@@ -20,8 +21,17 @@ public sealed partial class MainWindow : Window
             AppWindow.TitleBar.ExtendsContentIntoTitleBar = true;
             AppWindow.TitleBar.ButtonBackgroundColor = Colors.Transparent;
             AppWindow.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+
         }
-        SystemBackdrop = new MicaBackdrop();
+        var version = Environment.OSVersion.Version;
+        if (version.Major == 10 && version.Build >= 22000) // Windows 11 or later
+        {
+            SystemBackdrop = new MicaBackdrop();
+        }
+        else // Windows 10
+        {
+            SystemBackdrop = new DesktopAcrylicBackdrop();
+        }
     }
 
     public MainPageViewModel ViewModel { get; }
