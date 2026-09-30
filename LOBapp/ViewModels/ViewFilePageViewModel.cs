@@ -1,29 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
-using Parquet.Rows;
+﻿using Parquet.Rows;
 
 namespace LOBapp.ViewModels;
 
-public class RowView
+public sealed class ViewFilePageViewModel
 {
-    private readonly Row _parquetRow;
-
-    public RowView(Row row)
-    {
-        this._parquetRow = row;
-    }
-
-    public object this[int i]
-    {
-        get
-        {
-            return _parquetRow[i];
-        }
-    }
-}
-public partial class ViewFilePageViewModel : ObservableObject
-{
-
     public ViewFilePageViewModel(Table table, string path)
     {
         Table = table;

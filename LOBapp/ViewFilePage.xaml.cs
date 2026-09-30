@@ -16,14 +16,12 @@ public sealed partial class ViewFilePage : Page
 
     public ViewFilePage(ViewFilePageViewModel vm)
     {
-        this.InitializeComponent();
-        this.ViewModel = vm;
+        ViewModel = vm;
+        InitializeComponent();
 
         AddColumnsHeader();
     }
 
-    // Add columns from schema
-    // TODO: we have the parquet types could be fun to use them for the coulmns
     private void AddColumnsHeader()
     {
         int i = 0;
@@ -32,20 +30,14 @@ public sealed partial class ViewFilePage : Page
             ParquetDataGrid.Columns.Add(new DataGridTextColumn
             {
                 Header = f.Name,
-                Width = DataGridLength.SizeToCells,
+                Width = DataGridLength.SizeToHeader,
                 Binding = new Binding
                 {
-                    Path = new PropertyPath("[" + i++ + "]")
+                    Path = new PropertyPath("[" + i++ + "]"),
+                    Mode = BindingMode.OneWay
                 }
             });
-
         }
-    }
-
-    private void ParquetDataGrid_Loaded(object sender, RoutedEventArgs e)
-    {
-
-
     }
 }
 

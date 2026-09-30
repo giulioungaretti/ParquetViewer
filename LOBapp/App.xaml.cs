@@ -1,12 +1,6 @@
 ﻿using LOBapp.Services;
 
-using Microsoft.UI;
-using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
-
-using System;
-
-using Windows.Foundation;
 
 namespace LOBapp;
 /// <summary>
@@ -14,7 +8,7 @@ namespace LOBapp;
 /// </summary>
 public partial class App : Application
 {
-    private Window m_window;
+    private Window? m_window;
     /// <summary>
     /// Initializes the singleton application object.  This is the first line of authored code
     /// executed, and as such is the logical equivalent of main() or WinMain().
