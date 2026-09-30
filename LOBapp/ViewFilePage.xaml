@@ -13,10 +13,11 @@
         </Grid.RowDefinitions>
         <controls:DataGrid x:Name="ParquetDataGrid" 
                          AutoGenerateColumns="False"
-                         ItemsSource="{x:Bind ViewModel.Table, Mode=OneWay}" 
-                         Loaded="ParquetDataGrid_Loaded"
-                         Foreground="{ThemeResource TextFillColorPrimary}"
-                         Background="{ThemeResource SystemChromeMediumColor}"
+                         IsReadOnly="True"
+                         CanUserSortColumns="False"
+                         ItemsSource="{x:Bind ViewModel.Table}"
+                         Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                          MaxColumnWidth="400"
                          AlternatingRowBackground="{ThemeResource AppBarBackgroundThemeBrush }"
                          >

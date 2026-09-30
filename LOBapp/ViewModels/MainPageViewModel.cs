@@ -4,114 +4,106 @@ using CommunityToolkit.Mvvm.Input;
 using LOBapp.Services;
 
 using Microsoft.UI.Xaml.Controls;
+using Parquet;
 
 using System;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
-using Windows.Storage.Pickers;
-
-using WinRT.Interop;
+using Microsoft.Windows.Storage.Pickers;
 
 namespace LOBapp.ViewModels;
 
 public partial class MainPageViewModel : ObservableObject
 {
-    private readonly IntPtr hwnd;
     private readonly MainWindow mainWindow;
 
     public MainPageViewModel(MainWindow window)
     {
         mainWindow = window;
-        hwnd = WindowNative.GetWindowHandle(window);
     }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(Errored))]
-    string error;
-    public bool Errored => Error != null;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsNotDoingIO))]
-    bool isDoingIO;
-    public bool IsNotDoingIO => !IsNotDoingIO;
+    [NotifyCanExecuteChangedFor(nameof(OpenFileCommand), nameof(CloseCommand))]
+    public partial bool IsDoingIO { get; set; }
+
+    public bool IsNotDoingIO => !IsDoingIO;
 
     [ObservableProperty]
-    private string infoBarMsg;
+    public partial string InfoBarMsg { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private InfoBarSeverity infoBarSev;
+    public partial InfoBarSeverity InfoBarSev { get; set; }
 
     [ObservableProperty]
-    private bool infoBarOpen;
+    public partial bool InfoBarOpen { get; set; }
 
     [ObservableProperty]
-    private string filePath;
+    [NotifyPropertyChangedFor(nameof(WindowTitle))]
+    [NotifyCanExecuteChangedFor(nameof(CloseCommand))]
+    public partial string FilePath { get; set; } = string.Empty;
 
-    public void SetErorr(string msg)
+    public string WindowTitle => string.IsNullOrEmpty(FilePath) ? "Parquet Viewer" : $"{FilePath} - Parquet Viewer";
+
+    private bool CanOpenFile() => IsNotDoingIO;
+
+    private bool CanClose() => IsNotDoingIO && !string.IsNullOrEmpty(FilePath);
+
+    private void ShowMessage(string message, InfoBarSeverity severity)
     {
-        InfoBarMsg = msg;
+        InfoBarMsg = message;
+        InfoBarSev = severity;
         InfoBarOpen = true;
-        InfoBarSev = InfoBarSeverity.Error;
-    }
-    public void SetInfo(string msg)
-    {
-        InfoBarMsg = msg;
-        InfoBarOpen = true;
-        InfoBarSev = InfoBarSeverity.Informational;
     }
 
-    public void CloseMsgBar()
+    private void CloseMsgBar()
     {
-        InfoBarMsg = null;
+        InfoBarMsg = string.Empty;
         InfoBarOpen = false;
     }
-    [RelayCommand]
+
+    [RelayCommand(CanExecute = nameof(CanClose))]
     public void Close()
     {
-        filePath = null;
+        FilePath = string.Empty;
         CloseMsgBar();
-        mainWindow.SetBody(new Frame());
+        mainWindow.SetBody(null);
     }
 
-    [RelayCommand]
-    public async void GetTableAsync()
+    [RelayCommand(CanExecute = nameof(CanOpenFile))]
+    public async Task OpenFileAsync()
     {
-        if (IsDoingIO)
-        {
-            return;
-        }
         try
         {
             IsDoingIO = true;
 
-            FileOpenPicker filePicker = new();
+            FileOpenPicker filePicker = new(mainWindow.AppWindow.Id);
             filePicker.FileTypeFilter.Add(".parquet");
-            InitializeWithWindow.Initialize(filePicker, hwnd);
             var file = await filePicker.PickSingleFileAsync();
-
-            var result = await FileService.LoadAsync(file);
-            if (result.Error != null)
+            if (file is null)
             {
-                error = result.Error;
-                SetErorr(error);
                 return;
             }
 
-            SetInfo($"Loaded {file.Path}");
-            FilePath = file.Path;
-            IsDoingIO = false;
-
-            ViewFilePageViewModel vm = new(result.Data, result.Name);
+            CloseMsgBar();
+            string path = file.Path;
+            // Parquet decoding is CPU-intensive, even when its I/O APIs are asynchronous.
+            var table = await Task.Run(() => FileService.LoadAsync(path));
+            ViewFilePageViewModel vm = new(table, path);
             mainWindow.SetBody(new ViewFilePage(vm));
-
+            FilePath = path;
+            ShowMessage($"Loaded {path} ({table.Count:N0} rows)", InfoBarSeverity.Informational);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException
+            or NotSupportedException or FormatException or COMException or ParquetException)
         {
-            error = $"Unhanlded error{ex.Message}";
-            SetErorr(error);
+            ShowMessage($"Could not open the file: {ex.Message}", InfoBarSeverity.Error);
         }
         finally
         {
-            isDoingIO = false;
+            IsDoingIO = false;
         }
     }
 }
